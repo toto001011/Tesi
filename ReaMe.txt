@@ -1,0 +1,40 @@
+Prerequisiti
+
+
+
+
+
+
+
+-----Config Nebula net-----
+
+192.168.100.1/32: lighthouse1 (nebula_docker)
+
+192.168.100.5/32: laptop (nebula_docker_client)
+
+192.168.100.9/32: server (nebula_docker_server)
+
+-----Config docker net(routable addresses)-----
+
+10.10.0.4/16: lighthouse1 172.17.0.3/16
+
+10.10.0.3/16: server	172.17.0.4/16
+10.10.0.2/16: laptop  172.17.0.5/16
+
+sudo docker build -t nebula_server .
+sudo docker run --ip 10.10.0.4 --net nebulaNet  --privileged nebula_server 
+
+sudo docker build -t nebula_client .
+sudo docker run --ip 10.10.0.2 --net nebulaSubNet  --privileged nebula_client
+
+sudo docker build -t nebula_faro .
+sudo docker run --ip 10.10.0.3 --net nebulaSubNet  --privileged nebula_faro
+
+
+-----Per il test eseguire il docker con il seguente comando:-----
+sudo docker exec -it <container id> /bin/sh
+
+-----Per verificare il dns-----
+dig @192.168.100.1  +short server  A
+
+

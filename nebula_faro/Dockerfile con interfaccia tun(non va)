@@ -1,0 +1,107 @@
+FROM alpine:latest
+LABEL maintainer="Salvatore Francesco Indino"
+
+# Installazione dipendenze per Nebula
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git make cmake gcc musl-dev openssl-dev
+
+RUN apk add --no-cache go
+
+    
+# Copia dei file di configurazione necessari a nebula
+WORKDIR /nebula
+
+COPY ./ca.key  /nebula/
+COPY ./ca.crt /nebula/
+COPY ./host.crt /nebula/
+COPY ./host.key /nebula/
+COPY ./config.yaml /nebula/
+COPY ./nebula /nebula/
+
+
+RUN ifconfig
+
+# Esposizione delle porte utilizzate da Nebula
+EXPOSE 4242/tcp
+EXPOSE 4242/udp
+
+EXPOSE 4241/tcp
+EXPOSE 4241/udp
+
+EXPOSE 4243/tcp
+EXPOSE 4243/udp
+
+# Install sudo package
+RUN apk add --no-cache sudo
+
+#install ip route package
+RUN apk add --no-cache nebula openrc iproute2
+
+#install tun package
+#RUN apk add kmod
+#apk update
+#apk add linux-vanilla-dev
+#cd /usr/src/linux
+#make modules_prepare
+#cd /lib/modules/$(uname -r)/build/drivers/net
+#make tun.ko
+
+#RUN apk add --no-cache tunctl
+
+
+#RUN apk add linux-lts
+#
+RUN apk add --no-cache linux-modules-extra
+
+
+#RUN apk add linux-lts-3.14.0-tun
+
+#WORKDIR /
+## modprobe tun
+# Crea la directory /dev/net
+RUN mkdir -p /dev/net
+RUN modprobe tun
+
+# Crea l'interfaccia TUN
+RUN mknod /dev/net/tun c 10 200 && \
+    ip tuntap add dev nebula1 mode tun && \
+    ip addr add 192.168.100.1/24 dev nebula1 && \
+    ip link set dev nebula1 up
+    
+# Configurazione dell'interfaccia TUN
+
+#RUN  sudo ip tuntap add mode tun tun0 
+#RUN  sudo  ip addr add 192.168.100.9/24 dev tun0 
+#RUN  sudo  ip link set tun0 up
+
+#RUN --cap-add=NET_ADMIN --device=/dev/net/tun
+#RUN ip tuntap add mode tun tun0
+#RUN ip addr add 172.17.0.4/24 dev tun0
+
+WORKDIR /nebula
+
+#----------------------------
+
+#----------------------------
+
+
+
+#CMD ["sh", "-c", "ip tuntap add mode tun tun0 && ip addr add 192.168.100.1/24 dev tun0 && ip link set tun0 up"]
+
+#----------------------------
+
+#----------------------------
+
+
+
+#CMD ["mkdir", "-p", "/dev/net"]
+#CMD ["mknod", "/dev/net/tun", "c", "10", "200"]
+#CMD ["ifconfig", "tun0", "192.168.100.9", "netmask", "255.255.255.0", "up"]
+
+# Impostazione del comando predefinito per avviare Nebula
+CMD ["./nebula", "-config", "/nebula/config.yaml"]
+
+#CMD ["sh", "-c", "ip tuntap add mode tun tun0 && ip addr add 192.168.100.1/24 dev tun0 && ip link set tun0 up && ./nebula -config /nebula/config.yaml"]
+
+#CMD ["sh", "-c", "sleep 10 &&  ping '192.168.100.9'"]
+
