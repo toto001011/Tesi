@@ -1,2 +1,2 @@
-./Test/Kubectl/kubectl
-./Test/k3s/comp.tar
+/Test/Kubectl/kubectl
+/Test/k3s/comp.tar
