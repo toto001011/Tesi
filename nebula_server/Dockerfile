@@ -37,16 +37,17 @@ COPY ./host.crt /nebula/
 COPY ./host.key /nebula/
 COPY ./config.yaml /nebula/
 COPY ./nebula /nebula/
+RUN chmod +x /nebula/nebula
 
 # Copia il file tar.gz di K3s nella directory corrente del Dockerfile
 COPY kubectl  /nebula/
 
 COPY comp.yaml /nebula/
-# Copia lo script di entrypoint
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+# Copia lo script di initialize
+COPY initialize.sh /usr/local/bin/initialize.sh
 
 # Imposta i permessi di esecuzione per lo script di entrypoint
-RUN chmod +x /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/initialize.sh
 
 
 #Installo Kubectl
@@ -87,7 +88,7 @@ RUN apk update && apk add bind-tools
 
 # Impostare lo script entrypoint.sh come CMD
 # Imposta lo script di entrypoint come ENTRYPOINT
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["/usr/local/bin/initialize.sh"]
 
 
 
@@ -102,5 +103,5 @@ ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 
 # Impostazione del comando predefinito per avviare Nebula
-# CMD ["./nebula", "-config", "/nebula/config.yaml"]
+#CMD ["./nebula", "-config", "/nebula/config.yaml"]
 

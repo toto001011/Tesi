@@ -1,4 +1,5 @@
-FROM alpine:latest
+#FROM alpine:latest
+FROM docker:dind
 LABEL maintainer="Salvatore Francesco Indino"
 
 # Installazione dipendenze per Nebula
@@ -6,11 +7,29 @@ RUN apk update && apk upgrade && \
     apk add --no-cache bash git make cmake gcc musl-dev openssl-dev
 
 RUN apk add --no-cache go
+#RUN apk add --no-cache docker
 
-RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories
+
     
+RUN apk update && apk add docker
+RUN apk update && apk add openrc
+
+RUN apk update && \
+        apk add curl tar ca-certificates xz && \
+        apk add openrc && \
+        apk add iptables && \
+        rm -rf /var/cache/apk/*
+    RUN apk add curl tar ca-certificates xz
+
+#Scarico e installo k3d
+RUN curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | TAG=v5.0.0 bash
+
+
 # Copia dei file di configurazione necessari a nebula
 WORKDIR /nebula
+
+# Crea un nuovo gruppo chiamato 'docker_group' e un nuovo utente non-root 'user'
+
 
 COPY ./ca.key  /nebula/
 COPY ./ca.crt /nebula/
@@ -18,11 +37,30 @@ COPY ./host.crt /nebula/
 COPY ./host.key /nebula/
 COPY ./config.yaml /nebula/
 COPY ./nebula /nebula/
+RUN chmod +x /nebula/nebula
+
+# Copia il file tar.gz di K3s nella directory corrente del Dockerfile
+#COPY kubectl  /nebula/
+
+#COPY comp.yaml /nebula/
+# Copia lo script di entrypoint
+#COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+# Imposta i permessi di esecuzione per lo script di entrypoint
+#RUN chmod +x /usr/local/bin/entrypoint.sh
+
+
+#Installo Kubectl
+#RUN  install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+
+
+
+#RUN mkdir -p /etc/containerd
+#COPY config.toml /etc/containerd/
 
 
 RUN ifconfig
-
-
 
 # Esposizione delle porte utilizzate da Nebula
 EXPOSE 4242/tcp
@@ -33,44 +71,36 @@ EXPOSE 4241/udp
 
 EXPOSE 4243/tcp
 EXPOSE 4243/udp
+EXPOSE 80
+EXPOSE 8080
+EXPOSE 6444
+EXPOSE 6443
+#serve per kubernetes per pushare l'immagine nel registro locale 
+EXPOSE 5000
 
 # Install sudo package
 RUN apk add --no-cache sudo
-
-#install ip route package
-RUN apk add --no-cache nebula openrc iproute2
 RUN apk update && apk add bind-tools
 
 
 
 
 
-
-
-
-    
-# Configurazione dell'interfaccia 
-
-
-#----------------------------
-
-#----------------------------
+# Impostare lo script entrypoint.sh come CMD
+# Imposta lo script di entrypoint come ENTRYPOINT
+#ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 
 
 
-#CMD mkdir -p /dev/net && mknod /dev/net/tun c 10 200 && ip tuntap add dev tun0 mode tun && ip addr add 192.168.100.9/24 dev tun0 && ip link set dev tun0 up && ./nebula -config /nebula/config.yaml
-#FROM alpine:latest
 
 
 
-#CMD mkdir -p /dev/net && mknod /dev/net/tun c 10 200 && ip tuntap add dev tun0 mode tun && ip addr add 192.168.100.9/24 dev tun0 && ip link set dev tun0 up && ./nebula -config /nebula/config.yaml
 
-WORKDIR /nebula
-#CMD ls /dev/net && ip link set dev nebula1 up&& ifconfig &&./nebula -config /nebula/config.yaml
-#&& mknod /dev/net/tun c 10 200 || true && ip tuntap add dev nebula1 mode tun && ip addr add 192.168.100.9/24 dev  && ip link set dev tun0 up && ./nebula -config /nebula/config.yaml
 
-#WORKDIR /nebula
+
+#CMD ["dockerd"]
+
 
 # Impostazione del comando predefinito per avviare Nebula
 CMD ["./nebula", "-config", "/nebula/config.yaml"]
