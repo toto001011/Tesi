@@ -19,7 +19,10 @@ RUN apk update && \
         apk add openrc && \
         apk add iptables && \
         rm -rf /var/cache/apk/*
-    RUN apk add curl tar ca-certificates xz
+RUN apk add curl tar ca-certificates xz
+
+
+
 
 #Scarico e installo k3d
 RUN curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | TAG=v5.0.0 bash
@@ -45,10 +48,11 @@ COPY kubectl  /nebula/
 COPY comp.yaml /nebula/
 # Copia lo script di initialize
 COPY initialize.sh /usr/local/bin/initialize.sh
+COPY k3d_services.sh /usr/local/bin/k3d_services.sh
 
 # Imposta i permessi di esecuzione per lo script di entrypoint
-RUN chmod +x /usr/local/bin/initialize.sh
-
+RUN chmod +rwx /usr/local/bin/initialize.sh
+RUN chmod +x /usr/local/bin/k3d_services.sh
 
 #Installo Kubectl
 RUN  install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
@@ -88,7 +92,7 @@ RUN apk update && apk add bind-tools
 
 # Impostare lo script entrypoint.sh come CMD
 # Imposta lo script di entrypoint come ENTRYPOINT
-CMD ["/usr/local/bin/initialize.sh"]
+CMD ["/usr/local/bin/k3d_services.sh"]
 
 
 
