@@ -16,10 +16,12 @@ export DOCKER_COMPOSE_VERSION="2.20.2"
 export SHLVL=1
 export DIND_COMMIT="d58df1fc6c866447ce2cd129af10e5b507705624"
 read
-dockerd>/dev/null 2>&1; &
+echo "Avvio servizio dockerd"
+dockerd >/dev/null 2>&1 &
+
 #echo "PREMI un Tasto"
 
-#echo "SCRIPT K3D SERVICES"
+
 
 # Controlla che dockerd sia in esecuzione
 while ! docker info >/dev/null 2>&1; do
@@ -40,12 +42,19 @@ k3d cluster create comp-cluster
     sleep 5
 #done
 
-echo "Il cluster Kubernetes è stato avviato correttamente."
+##echo "Il cluster Kubernetes è stato avviato correttamente."
 
+# Attendi che il pod sia pronto (puoi utilizzare comandi kubectl per questo)
 echo "Avvio il pod comp.yaml"
 kubectl apply -f comp.yaml
 
-# Attendi che il pod sia pronto (puoi utilizzare comandi kubectl per questo)
+while ! kubectl get pods 2>&1 | grep -q "Running"; do
+    sleep 1 
+done
+
+
+echo "Pod comp-pod RUNNING"
+
 
 echo "Avvio il servizio Nebula"
 ./nebula -config /nebula/config.yaml
