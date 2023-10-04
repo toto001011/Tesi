@@ -1,4 +1,20 @@
-Prerequisiti
+Istruzioni per l'avvio dei nodi nebula con i servizi dokcerd e k3d
+
+1)Posizionarsi nella cartella "nebula faro" 
+1.1) Aprire il terminare ed esegure il comando(fa la build e crea l'immagine docker) : sudo docker build -t nebula_faro .
+1.2)Runnare l'immagine docker creata nel punto 1.1) con il comando: sudo docker run --privileged -it nebula_faro 
+
+2)Posizionarsi nella cartella "nebula server"
+2.1) Aprire il terminare ed esegure il comando: sudo docker build -t nebula_server .
+2.2)Runnare l'immagine docker creata nel punto 1.1) con il comando: sudo docker run --privileged -it nebula_server
+A questo punto lo script di avvio di nebula_server avvia i servizi dockerd e k3d
+
+
+3)Posizionarsi nella cartella "nebula client"
+3.1) Aprire il terminare ed esegure il comando: sudo docker build -t nebula_client .
+3.2)Runnare l'immagine docker creata nel punto 1.1) con il comando: sudo docker run --privileged -it nebula_client
+A questo punto lo script di avvio di nebula_client avvia i servizi dockerd e k3d
+
 
 
 
