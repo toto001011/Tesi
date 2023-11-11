@@ -1,0 +1,12 @@
+apiVersion: core.kubefed.io/v1beta1
+kind: KubeFedConfig
+metadata:
+  name: comp-federation
+spec:
+  scope: Cluster
+  controller: Deployment
+  hostCluster: comp-cluster-server
+  clusters:
+    - name: comp-cluster-client
+      context: k3d-comp-cluster-client
+

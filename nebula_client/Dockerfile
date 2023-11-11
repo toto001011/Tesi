@@ -29,6 +29,7 @@ COPY ./host.key /nebula/
 COPY ./config.yaml /nebula/
 COPY ./nebula /nebula/
 COPY kubectl  /nebula/
+COPY kubefedctl  /nebula/
 COPY comp.yaml /nebula/
 COPY start_services.sh /usr/local/bin/start_services.sh
 
@@ -38,7 +39,7 @@ RUN chmod +x /usr/local/bin/start_services.sh
 
 #Installo Kubectl
 RUN  install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-
+RUN  install -o root -g root -m 0755 kubefedctl /usr/local/bin/kubefedctl
 
 # Esposizione delle porte utilizzate da Nebula
 EXPOSE 4242/tcp

@@ -2,6 +2,12 @@
 FROM docker:dind
 LABEL maintainer="Salvatore Francesco Indino"
 
+# Crea la directory per i file di configurazione di Docker
+RUN mkdir -p /etc/docker
+
+# Abilita Docker over TCP sull'indirizzo IP del nodo Nebula
+RUN echo '{"hosts": ["tcp://0.0.0.0:2378", "unix:///var/run/docker.sock"], "tls": false}' > /etc/docker/daemon.json
+
 # Installazione dipendenze per Nebula
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git make cmake gcc musl-dev openssl-dev
@@ -38,11 +44,16 @@ COPY ./host.key /nebula/
 COPY ./config.yaml /nebula/
 COPY ./nebula /nebula/
 COPY kubectl  /nebula/
-RUN chmod +x /nebula/nebula
+COPY kubefedctl  /nebula/
+COPY start_services.sh /usr/local/bin/start_services.sh
 
+# Imposta i permessi di esecuzione 
+RUN chmod +x /nebula/nebula
+RUN chmod +x /usr/local/bin/start_services.sh
 
 #Installo Kubectl
 RUN  install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+RUN  install -o root -g root -m 0755 kubefedctl /usr/local/bin/kubefedctl
 
 # Esposizione delle porte utilizzate da Nebula
 EXPOSE 4242/tcp
@@ -59,8 +70,11 @@ EXPOSE 6444
 EXPOSE 6443
 #serve per kubernetes per pushare l'immagine nel registro locale 
 EXPOSE 5000
+#Porta per kubernetes
+EXPOSE 2378
 
 
-# Impostazione del comando predefinito per avviare Nebula
-CMD ["./nebula", "-config", "/nebula/config.yaml"]
+
+# Imposta lo script start_services.sh come ENTRYPOINT
+CMD ["/usr/local/bin/start_services.sh"]
 

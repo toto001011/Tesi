@@ -67,4 +67,3 @@ echo "Pod comp-pod RUNNING"
 
 echo "Avvio il servizio Nebula"
 ./nebula -config /nebula/config.yaml
-

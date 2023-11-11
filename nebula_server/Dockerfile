@@ -2,6 +2,12 @@
 FROM docker:dind
 LABEL maintainer="Salvatore Francesco Indino"
 
+# Crea la directory per i file di configurazione di Docker
+RUN mkdir -p /etc/docker
+
+# Abilita Docker over TCP sull'indirizzo IP del nodo Nebula
+RUN echo '{"hosts": ["tcp://0.0.0.0:2379", "unix:///var/run/docker.sock"], "tls": false}' > /etc/docker/daemon.json
+
 # Installazione dipendenze per Nebula
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git make cmake gcc musl-dev openssl-dev
@@ -16,6 +22,9 @@ RUN apk update && \
         rm -rf /var/cache/apk/*
 RUN apk add curl tar ca-certificates xz
 
+
+
+
 #Scarico e installo k3d
 RUN curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | TAG=v5.0.0 bash
 
@@ -29,7 +38,9 @@ COPY ./host.key /nebula/
 COPY ./config.yaml /nebula/
 COPY ./nebula /nebula/
 COPY kubectl  /nebula/
+COPY kubefedctl  /nebula/
 COPY comp.yaml /nebula/
+COPY KubeFedConfig.yaml /nebula/
 COPY start_services.sh /usr/local/bin/start_services.sh
 
 # Imposta i permessi di esecuzione 
@@ -39,6 +50,7 @@ RUN chmod +x /usr/local/bin/start_services.sh
 #Installo Kubectl
 RUN  install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
+RUN  install -o root -g root -m 0755 kubefedctl /usr/local/bin/kubefedctl
 
 # Esposizione delle porte utilizzate da Nebula
 EXPOSE 4242/tcp
@@ -56,6 +68,10 @@ EXPOSE 6443
 
 #serve per kubernetes per pushare l'immagine nel registro locale 
 EXPOSE 5000
+
+#Porta per kubernetes
+EXPOSE 2378
+EXPOSE 2379
 
 
 

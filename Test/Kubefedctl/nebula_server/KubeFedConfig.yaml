@@ -1,0 +1,14 @@
+apiVersion: core.kubefed.io/v1beta1
+kind: KubeFedConfig
+metadata:
+  name: kubefed
+  namespace: kube-federation-system
+spec:
+  scope: Cluster
+  
+  clusters:
+    - name: comp-cluster-client-1
+      context: admin@k3d-comp-cluster-client-1
+    - name: comp-cluster-client-2
+      context: admin@k3d-comp-cluster-client-2
+
