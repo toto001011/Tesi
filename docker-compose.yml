@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  nebula1:
+    image: 
+    container_name: nebula1
+    networks:
+      - nebula-net
+
+  nebula2:
+    image: your-nebula-image
+    container_name: nebula2
+    networks:
+      - nebula-net
+
+  nebula3:
+    image: your-nebula-image
+    container_name: nebula3
+    networks:
+      - nebula-net
+
+networks:
+  nebula-net:
+    driver: bridge
+

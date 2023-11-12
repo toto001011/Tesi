@@ -2,8 +2,6 @@
 
 
 echo "Configure la variabile DOCKER_HOST"
-echo "Premi un tasto per continuare"
-
 #export DOCKER_HOST="unix:///var/run/docker.sock"
 # Imposta le variabili d'ambiente
 export DOCKER_HOST="unix:///var/run/docker.sock"
@@ -17,27 +15,29 @@ export TERM="xterm"
 export DOCKER_COMPOSE_VERSION="2.20.2"
 export SHLVL=1
 export DIND_COMMIT="d58df1fc6c866447ce2cd129af10e5b507705624"
-read
+echo "Variabili d'ambiente configurate correttamente"
+
+
+
+#----------
+
 echo "Avvio servizio dockerd"
 dockerd >/dev/null 2>&1 &
 
-#echo "PREMI un Tasto"
 
 
 
+done=0
 # Controlla che dockerd sia in esecuzione
-while ! docker info >/dev/null 2>&1; do
-    echo "In attesa del completamento di dockerd..."
-    sleep 1
-done
+
 
 echo "Il servizio dockerd è stato avviato correttamente."
 
-echo "Premi un tasto per continuare..."
-read
+
 
 
 
 echo "Avvio il servizio Nebula"
-./nebula -config /nebula/config.yaml
+./nebula -config /nebula/config.yaml   
+#>/dev/null 2>&1;
 
