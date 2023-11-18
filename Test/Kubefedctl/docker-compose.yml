@@ -19,6 +19,7 @@ services:
       - 5000
       - 23788
       - 2379
+      - 2375
       
   nebulaserver:
     image: nebula_server_test
@@ -39,6 +40,7 @@ services:
       - 5000
       - 23788
       - 2379
+      - 2375
       
   nebulaclient:
     image: nebula_client_test
@@ -59,6 +61,7 @@ services:
       - "5000:5000"
       - "23788:23788"
       - "2379:2379"
+      - 2375
 
 networks:
   nebula1:
