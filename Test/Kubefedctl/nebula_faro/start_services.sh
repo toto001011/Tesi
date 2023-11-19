@@ -24,7 +24,7 @@ echo "Variabili d'ambiente configurate correttamente"
 echo "Avvio servizio dockerd"
 dockerd >/dev/null 2>&1 &
 
-
+sleep 17
 
 
 echo "Il servizio dockerd è stato avviato correttamente."
