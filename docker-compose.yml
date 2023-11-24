@@ -1,25 +1,71 @@
 version: '3'
 
 services:
-  nebula1:
-    image: 
-    container_name: nebula1
+  nebulafaro:
+    image: nebula_faro
+    privileged: true
+    container_name: nebula_faro
     networks:
-      - nebula-net
+      - nebula1
+    ports:
+      - 4242
+      - 4241
+      - 4342
+      - 80
+      - 8080
+      - 6444
+      - 6443
+      - 443
+      - 5000
+      - 23788
+      - 2379
+      - 2375
+      
+  nebulaserver:
+    image: nebula_server
+    privileged: true
+    container_name: nebula_server
+    networks:
+      - nebula1
 
-  nebula2:
-    image: your-nebula-image
-    container_name: nebula2
+    ports:
+      - 4242
+      - 4241
+      - 4342
+      - 80
+      - 8080
+      - 6444
+      - 6443
+      - 443
+      - 5000
+      - 23788
+      - 2379
+      - 2375
+      
+  nebulaclient:
+    image: nebula_client
+    privileged: true
+    container_name: nebula_client
     networks:
-      - nebula-net
+      - nebula1
 
-  nebula3:
-    image: your-nebula-image
-    container_name: nebula3
-    networks:
-      - nebula-net
+    ports:
+      - 4242
+      - 4241
+      - 4342
+      - 80
+      - 8080
+      - 6444
+      - 6443
+      - 443
+      - 5000
+      - 23788
+      - 2379
+      - 2375
+
+
 
 networks:
-  nebula-net:
+  nebula1:
     driver: bridge
 

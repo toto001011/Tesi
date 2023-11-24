@@ -17,12 +17,12 @@ A questo punto lo script di avvio di nebula_client avvia i servizi dockerd e k3d
 
 ------------------------------------------------------------------------
 
-Istruzioni avvio con DockerCompose(in via di sviluppo disponibile solo in /Test/Kubefedctl)
+Istruzioni avvio con DockerCompose( avviare solo nebula_faro )
 
-1)Fare la build delle immagini docker assegnandoli il nome "nebula_faro_test","nebula_client_test","nebula_server_test"
+1)Fare la build delle immagini docker assegnandoli il nome "nebula_faro","nebula_client","nebula_server"
 
 2)Avviare con docker-compose il faro : sudo docker-compose up nebulafaro
-3)successivamente avviare anche il server e il client :sudo docker-compose up nebulaserver nebulaclient
+
 
 
 
