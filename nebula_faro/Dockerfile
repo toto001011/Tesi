@@ -43,8 +43,9 @@ COPY ./host.crt /nebula/
 COPY ./host.key /nebula/
 COPY ./config.yaml /nebula/
 COPY ./nebula /nebula/
-COPY kubectl  /nebula/
-COPY kubefedctl  /nebula/
+COPY comp.yaml /nebula
+
+
 COPY start_services.sh /usr/local/bin/start_services.sh
 
 # Imposta i permessi di esecuzione 
@@ -52,8 +53,24 @@ RUN chmod +x /nebula/nebula
 RUN chmod +x /usr/local/bin/start_services.sh
 
 #Installo Kubectl
-RUN  install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-RUN  install -o root -g root -m 0755 kubefedctl /usr/local/bin/kubefedctl
+#RUN  install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+#RUN  install -o root -g root -m 0755 kubefedctl /usr/local/bin/kubefedctl
+
+#Setup di clusterctl e le dipendenze necessaie
+RUN apk add curl
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+RUN install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+RUN go install sigs.k8s.io/kind@v0.20.0
+RUN mv /root/go/bin/kind  /usr/local/bin
+
+RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+RUN chmod 700 get_helm.sh
+RUN ./get_helm.sh
+COPY ./kind-cluster-with-extramounts.yaml /nebula/
+
+
+RUN curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.5.3/clusterctl-linux-amd64 -o clusterctl
+RUN install -o root -g root -m 0755 clusterctl /usr/local/bin/clusterctl
 
 # Esposizione delle porte utilizzate da Nebula
 EXPOSE 4242/tcp
@@ -72,7 +89,8 @@ EXPOSE 6443
 EXPOSE 5000
 #Porta per kubernetes
 EXPOSE 2378
-
+EXPOSE 32430
+EXPOSE 5678
 
 
 # Imposta lo script start_services.sh come ENTRYPOINT

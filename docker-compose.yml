@@ -6,7 +6,8 @@ services:
     privileged: true
     container_name: nebula_faro
     networks:
-      - nebula1
+      custom_network:
+        ipv4_address: 172.18.0.2
     ports:
       - 4242
       - 4241
@@ -26,8 +27,8 @@ services:
     privileged: true
     container_name: nebula_server
     networks:
-      - nebula1
-
+      custom_network:
+        ipv4_address: 172.18.0.3
     ports:
       - 4242
       - 4241
@@ -47,8 +48,8 @@ services:
     privileged: true
     container_name: nebula_client
     networks:
-      - nebula1
-
+      custom_network:
+        ipv4_address: 172.18.0.4    
     ports:
       - 4242
       - 4241
@@ -63,9 +64,11 @@ services:
       - 2379
       - 2375
 
-
-
 networks:
-  nebula1:
+  custom_network:
     driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/16
 

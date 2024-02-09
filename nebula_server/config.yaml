@@ -21,7 +21,8 @@ pki:
 static_host_map:
   #config del faro "192.168.100.1": ["10.10.0.3:4242"]
   #config del server
-  "192.168.100.1": ["172.17.0.2:4242"]
+ # "192.168.100.1": ["172.17.0.2:4242"] SENZA DOCKER-COMPOSE
+  "192.168.100.1": ["172.18.0.2:4242"] #CON DOCKER-COMPOSE
 
 
 lighthouse:

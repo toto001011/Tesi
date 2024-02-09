@@ -61,5 +61,5 @@ sudo docker exec -it <container id> /bin/sh
 
 -----Per verificare il dns-----
 dig @192.168.100.1  +short server  A
-
+dig @192.168.100.1  +short laptop  A
 

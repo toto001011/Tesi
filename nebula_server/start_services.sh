@@ -40,30 +40,6 @@ read
 
 #-------------
 
-echo "Avvio il cluster comp-cluster"
-k3d cluster create comp-cluster
-
-# Controlla che il cluster sia pronto
-while ! k3d cluster list | grep "comp-cluster"; do
-    sleep 1
-done
-
-echo "Il cluster Kubernetes è stato avviato correttamente."
-echo "Premi un tasto per avviare il Pod..."
-read
-# Attendi che il pod sia pronto (puoi utilizzare comandi kubectl per questo)
-echo "Avvio il pod comp.yaml"
-kubectl apply -f comp.yaml >/dev/null 2>&1 
-
-echo "Attendo che il pod sia RUNNING"
-
-while ! kubectl get pods 2>&1 | grep -q "Running"; do
-    sleep 1 
-done
-
-
-echo "Pod comp-pod RUNNING"
-
 
 echo "Avvio il servizio Nebula"
 ./nebula -config /nebula/config.yaml

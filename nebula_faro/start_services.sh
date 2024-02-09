@@ -16,8 +16,7 @@ export DOCKER_COMPOSE_VERSION="2.20.2"
 export SHLVL=1
 export DIND_COMMIT="d58df1fc6c866447ce2cd129af10e5b507705624"
 echo "Variabili d'ambiente configurate correttamente"
-echo "Premi un tasto per continuare"
-read
+
 
 #----------
 
@@ -35,9 +34,13 @@ while ! docker info >/dev/null 2>&1; do
 done
 
 echo "Il servizio dockerd è stato avviato correttamente."
-echo "Premi un tasto oer continuare..."
-read
 
+
+
+#kind create cluster --config kind-cluster-with-extramounts.yaml
+
+#export CLUSTER_TOPOLOGY=true
+#clusterctl init --infrastructure docker
 
 
 
