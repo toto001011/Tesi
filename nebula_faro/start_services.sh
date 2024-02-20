@@ -37,13 +37,30 @@ echo "Il servizio dockerd è stato avviato correttamente."
 
 
 
-#kind create cluster --config kind-cluster-with-extramounts.yaml
+kind create cluster --config kind-cluster-with-extramounts.yaml
 
-#export CLUSTER_TOPOLOGY=true
-#clusterctl init --infrastructure docker
+export CLUSTER_TOPOLOGY=true
+clusterctl init --infrastructure docker
 
+export SERVICE_CIDR=["10.96.0.0/12"]
+export POD_CIDR=["192.168.0.0/16"]
+export SERVICE_DOMAIN="k8s.test"
+export POD_SECURITY_STANDARD_ENABLED="false"
+
+clusterctl generate cluster capi-quickstart --flavor development \
+  --kubernetes-version v1.29.0 \
+  --control-plane-machine-count=3 \
+  --worker-machine-count=3 \
+  > capi-quickstart.yaml
+
+kubectl apply -f capi-quickstart.yaml
 
 
 echo "Avvio il servizio Nebula"
 ./nebula -config /nebula/config.yaml
+
+
+EOF
+
+
 
