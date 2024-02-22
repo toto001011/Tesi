@@ -1,9 +1,0 @@
-apiVersion: core.kubefed.io/v1beta1
-kind: KubeFedCluster
-metadata:
-  name: comp-cluster
-spec:
-  apiEndpoint: https://192.168.100.9:6443
-  secretRef:
-    name: comp-cluster-nebula-secret
-
