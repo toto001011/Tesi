@@ -35,7 +35,7 @@ done
 
 echo "Il servizio dockerd è stato avviato correttamente."
 
-
+ip route add 10.9.0.0/24 via 192.168.60.254
 
 
 echo "Avvio il servizio Nebula"
