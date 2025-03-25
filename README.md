@@ -8,4 +8,6 @@ tradizionale per la sua flessibilita', scalabilita' e capacita' di gestire topol
 gie di rete complesse. Attraverso l’utilizzo di Nebula, si superano le
 limitazioni della rete fisica sottostante, consentendo una migrazione
 fluida e efficiente delle risorse computazionali all’interno del cluster
-Kubernetes
+Kubernetes.
+
+Per maggior dettagli invito a leggere il documento tesi.pdf nel quale è spiegato nel dettaglio lo scopo e la creazione del presente progetto.
