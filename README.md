@@ -10,4 +10,4 @@ limitazioni della rete fisica sottostante, consentendo una migrazione
 fluida e efficiente delle risorse computazionali all’interno del cluster
 Kubernetes.
 
-Per maggior dettagli invito a leggere il documento tesi.pdf nel quale è spiegato nel dettaglio lo scopo e la creazione del presente progetto.
+Per maggior dettagli invito a leggere il documento thesis.pdf nel quale è spiegato nel dettaglio lo scopo e la creazione del presente progetto.
