@@ -11,3 +11,5 @@ fluida e efficiente delle risorse computazionali all’interno del cluster
 Kubernetes.
 
 Per maggior dettagli invito a leggere il documento thesis.pdf nel quale è spiegato nel dettaglio lo scopo e la creazione del presente progetto.
+
+Questo progetto è rilasciato nel pubblico dominio tramite CC0 1.0
